@@ -15,17 +15,12 @@ canidateTotals = {}
 
 with open(csvpath) as pollCSV:
     csvreader = csv.reader(pollCSV, delimiter=',')
-    
-    
     header = next(csvreader)
 
     for row in csvreader:
         total_votes += 1
         allCandidatesWithDupes.append(row[2])
-        if canidateTotals.get(row[2]):
-            canidateTotals[row[2]] += 1
-        else:
-            canidateTotals[row[2]] = 0
+        canidateTotals[row[2]] = canidateTotals.setdefault(row[2], 0) + 1
 
 print(total_votes)
 uniqueCandidates = set(allCandidatesWithDupes)
