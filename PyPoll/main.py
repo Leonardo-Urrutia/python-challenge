@@ -16,8 +16,8 @@ canidateTotals = {}
 with open(csvpath) as pollCSV:
     csvreader = csv.reader(pollCSV, delimiter=',')
     
-    #discard the header row
-    next(csvreader)
+    
+    header = next(csvreader)
 
     for row in csvreader:
         total_votes += 1
@@ -28,7 +28,7 @@ with open(csvpath) as pollCSV:
             canidateTotals[row[2]] = 0
 
 print(total_votes)
-print(set(allCandidatesWithDupes))
+uniqueCandidates = set(allCandidatesWithDupes)
 
 for candidate_name, vote_total in canidateTotals.items():
     print(candidate_name)
