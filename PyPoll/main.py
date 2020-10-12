@@ -3,14 +3,14 @@
 #4 percentage of votes per candidate
 #3 total of votes per candidate
 #5 Winner of poll
-#
+
 
 import os
 import csv
 csvpath = os.path.join(os.path.abspath(__file__),'..', 'Resources', 'election_data.csv')
+summaryWrite = os.path.join(os.path.abspath(__file__),'..', 'analysis', 'analysis.txt')
 
 total_votes = 0
-allCandidatesWithDupes = []
 candidateTotals = {}
 
 #Grabs count of total vote and fills dictionary with vote count for each candidate
@@ -21,11 +21,10 @@ with open(csvpath) as pollCSV:
 
     for row in csvreader:
         total_votes += 1
-        allCandidatesWithDupes.append(row[2])
         candidateTotals[row[2]] = candidateTotals.setdefault(row[2], 0) + 1
 
 
-uniqueCandidates = set(allCandidatesWithDupes)
+#Converting the values in dictionary to unique variable and use that variable to format as percentage.
 
 khanVoteCount = round(int(candidateTotals["Khan"]) / total_votes, 3)
 correyVoteCount = round(int(candidateTotals["Correy"]) / total_votes, 3)
@@ -37,22 +36,19 @@ correyPercentage = "{:.0%}".format(correyVoteCount)
 liPercentage = "{:.0%}".format(liVoteCount)
 oTooleyPercentage = "{:.0%}".format(oTooleyVoteCount)
 
+#store the printing analysis as a variable to use multiple times
+output = (
+    f'Election Results\n'
+    f'--------------------\n'
+    f'Total Votes: {total_votes}\n'
+    f'Khan: {khanPercentage} with {candidateTotals["Khan"]} votes\n'
+    f'Correy: {correyPercentage} with {candidateTotals["Correy"]} votes\n'
+    f'Li: {liPercentage} with {candidateTotals["Li"]} votes\n'
+    f"""O'Tooley: {oTooleyPercentage} with {candidateTotals["O'Tooley"]}\n"""
+    f'--------------------\n'
+    f'Winner: Khan\n'
+)
 
-
-print(f'Election Results')
-print(f'Total Votes: {total_votes}')
-print(f'Khan: {khanPercentage} with {candidateTotals["Khan"]} votes')
-print(f'Correy: {correyPercentage} with {candidateTotals["Correy"]} votes')
-print(f'Li: {liPercentage} with {candidateTotals["Li"]}')
-print(f"""O'Tooley: {oTooleyPercentage} with {candidateTotals["O'Tooley"]}""")
-print(f'Winner: Khan')
-
-# print(total_votes)
-# print(khanVoteCount)
-# print(correyVoteCount)
-# print(liVoteCount)
-# print(oTooleykhanVoteCount)
-
-# for candidate_name, vote_total in canidateTotals.items():
-#     print(candidate_name)
-#     print(vote_total)
+print(output)
+with open(summaryWrite, "a") as txtSummary:
+    txtSummary.write(output)
